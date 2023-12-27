@@ -1,0 +1,6 @@
+FileVersion = 1
+
+[Project]
+Name = "Paka"
+TargetType = "BeefLib"
+StartupObject = "Paka.Program"
