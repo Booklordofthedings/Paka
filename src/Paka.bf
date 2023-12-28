@@ -1,11 +1,39 @@
 namespace Paka;
-
+using System.Collections;
 /*-----------------------------------------------------------------
-This is an implementation of the following algorithm by blackpawn:
+This is an implementation of the following algorithm by blackpawn, slightly adapted to support sized rectangles:
 https://blackpawn.com/texts/lightmaps/default.html
 -----------------------------------------------------------------*/
 class Paka
 {
+	public struct PakaRectangle
+	{
+		public int64 id;
+		public int64 x;
+		public int64 y;
+		public int64 width;
+		public int64 height;
+
+		public this(int64 pId = 0, int64 pW = 32, int64 pH = 32, int64 pX = 0, int64 pY = 0)
+		{
+			id = pId;
+			x = pX;
+			y = pY;
+			width = pW;
+			height = pH;			
+		}
+	}
+
+	//This stores all rectangles being input
+	List<PakaRectangle> Rects = new .(20) ~ delete _; //20 rects should be a resonable base for this type of thing
+
+	//Only used internally in order for the node structure to work correctly
+	private class PakaNode
+	{
+		public PakaRectangle Size = .(-1);
+		public int64[4] Rect = .();
+		public PakaNode[2] Nodes = .(null, null);
+	}
 }
 /*
 class RectanglePacker
@@ -163,16 +191,5 @@ class RectanglePacker
 	}
 }
 
-struct packerRectangle
-{
-	public int32 id = 0;
-	public int32[4] rect = .(0,0,0,0); //x,y width height
 
-	public this(int32 id, int32 width, int32 height)
-	{
-		this.id = id;
-		this.rect[2] = width;
-		this.rect[3] = height;
-	}
-}
 */
