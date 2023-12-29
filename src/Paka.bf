@@ -9,16 +9,14 @@ class Paka
 	public struct PakaRectangle
 	{
 		public int64 id;
-		public int64 x;
-		public int64 y;
+		public int64 x = 0;
+		public int64 y = 0;
 		public int64 width;
 		public int64 height;
 
-		public this(int64 pId = 0, int64 pW = 32, int64 pH = 32, int64 pX = 0, int64 pY = 0)
+		public this(int64 pId = 0, int64 pW = 32, int64 pH = 32)
 		{
 			id = pId;
-			x = pX;
-			y = pY;
 			width = pW;
 			height = pH;			
 		}
@@ -33,6 +31,14 @@ class Paka
 		public PakaRectangle Size = .(-1);
 		public int64[4] Rect = .();
 		public PakaNode[2] Nodes = .(null, null);
+
+		public this() {}
+		public this(int32 width, int32 height) {
+			Rect[0] = 0;
+			Rect[1] = 0;
+			Rect[2] = width;
+			Rect[3] = height;
+		}
 	}
 }
 /*
