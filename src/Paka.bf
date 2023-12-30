@@ -33,25 +33,7 @@ class Paka
 		public PakaNode[2] Nodes = .(null, null);
 
 		public this() {}
-		public this(int32 width, int32 height) {
-			Rect[0] = 0;
-			Rect[1] = 0;
-			Rect[2] = width;
-			Rect[3] = height;
-		}
-	}
-}
-/*
-class RectanglePacker
-{
-	class packerNode
-	{
-		public packerRectangle Img = .(-2,-2,-2);
-		public int32[4] Rect = .(); //X Y Width Height
-		public packerNode[2] Nodes = .(null, null);
-
-		public this() {}
-		public this(int32 width, int32 height) {
+		public this(int64 width, int64 height) {
 			Rect[0] = 0;
 			Rect[1] = 0;
 			Rect[2] = width;
@@ -66,7 +48,7 @@ class RectanglePacker
 				delete Nodes[1];
 		}
 
-		public bool Insert(packerRectangle pToInsert)
+		public bool Insert(PakaRectangle pToInsert)
 		{
 			if(!(Nodes[1] == null && Nodes[0] == null))
 			{
@@ -76,46 +58,46 @@ class RectanglePacker
 			}
 			else
 			{
-				if(Img.id != -2)
+				if(Size.id != -2)
 					return false;
 
-				if(!(pToInsert.rect[2] <= Rect[2] && pToInsert.rect[3] <= Rect[3]))
+				if(!(pToInsert.width <= Rect[2] && pToInsert.height <= Rect[3]))
 					return false;
 				
-				if(pToInsert.rect[2] == Rect[2] && pToInsert.rect[3] == Rect[3])
+				if(pToInsert.width == Rect[2] && pToInsert.height == Rect[3])
 				{
-					Img = pToInsert;
+					Size = pToInsert;
 					return true;
 				}
 
 				Nodes[0] = new .();
 				Nodes[1] = new .();
 
-				int32 dw = Rect[2] - pToInsert.rect[2];
-				int32 dh = Rect[3] - pToInsert.rect[3];
+				int64 dw = Rect[2] - pToInsert.width;
+				int64 dh = Rect[3] - pToInsert.height;
 					
 				if(dw > dh)
 				{
 					
-					Nodes[0].Rect = .(Rect[0], Rect[1], pToInsert.rect[2], Rect[3]);
-					Nodes[1].Rect = .(Rect[0] + pToInsert.rect[2], Rect[1], Rect[2] - pToInsert.rect[2], Rect[3]);
+					Nodes[0].Rect = .(Rect[0], Rect[1], pToInsert.width, Rect[3]);
+					Nodes[1].Rect = .(Rect[0] + pToInsert.width, Rect[1], Rect[2] - pToInsert.width, Rect[3]);
 				}
 				else
 				{
-					Nodes[0].Rect = .(Rect[0], Rect[1], Rect[2], pToInsert.rect[3]);
-					Nodes[1].Rect = .(Rect[0], Rect[1] + pToInsert.rect[3], Rect[2], Rect[3] - pToInsert.rect[3]);
+					Nodes[0].Rect = .(Rect[0], Rect[1], Rect[2], pToInsert.width);
+					Nodes[1].Rect = .(Rect[0], Rect[1] + pToInsert.width, Rect[2], Rect[3] - pToInsert.width);
 				}
 
 				return Nodes[0].Insert(pToInsert);
 			}
 		}
 
-		public void GetPackedSorted(List<packerRectangle> pToAddTo, int32 xOffset, int32 yOffset)
+		public void GetPackedSorted(List<PakaRectangle> pToAddTo, int32 xOffset, int32 yOffset)
 		{
-			if(Img.id != -2)
+			if(Size.id != -2)
 			{
-				Img.rect[0] = xOffset + Rect[0];
-				Img.rect[1] = yOffset + Rect[1];
+				Size.x = xOffset + Rect[0];
+				Size.y = yOffset + Rect[1];
 				pToAddTo.Add(Img);
 				return;
 			}
@@ -128,7 +110,6 @@ class RectanglePacker
 		}
 	}
 
-	
 	List<packerNode> _bins = new .() ~ DeleteContainerAndItems!(_); 
 
 	public void Sort(List<packerRectangle> pToSort)
@@ -163,21 +144,21 @@ class RectanglePacker
 	}
 
 	///Input objects need to be sorted by height and then width
-	public void PackSorted(List<packerRectangle> pRects)
+	public void PackSorted(List<PakaRectangle> pRects)
 	{
 		this.Sort(pRects);
 
 		if(pRects.Count <= 0)
 			return;
 
-		int32 binWidth = pRects[0].rect[2];
-		int32 binHeight = pRects[0].rect[3];
+		int64 binWidth = pRects[0].width;
+		int64 binHeight = pRects[0].height;
 
-		int32 area = 0;
+		int64 area = 0;
 
 		for(let e in pRects)
 		{
-			area += e.rect[2] * e.rect[3];
+			area += e.width * e.height;
 		}
 		area = (.)(area * 1.15);
 		_bins.Add(new .(
@@ -190,12 +171,9 @@ class RectanglePacker
 			for(let b in _bins)
 				if(b.Insert(e))
 					continue outer;
-			var toAdd = new packerNode(binWidth, binHeight);
+			var toAdd = new PakaNode(binWidth, binHeight);
 			toAdd.Insert(e);
 			_bins.Add(toAdd);
 		}
 	}
 }
-
-
-*/
